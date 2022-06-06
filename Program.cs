@@ -4,8 +4,13 @@ argumentParser.AddParamHook("--input", delegate (string arg) { csvConverterArgum
 argumentParser.AddParamHook("--output", delegate (string arg) { csvConverterArgument.OutputFilePath = arg; });
 argumentParser.Parse(args);
 
-Console.WriteLine(csvConverterArgument.InputFilePath);
-Console.WriteLine(csvConverterArgument.OutputFilePath);
+// ReSharper disable InconsistentNaming
+const string COMMA = ",";
+const string TAB = "\t";
+
+var text = File.ReadAllText(csvConverterArgument.InputFilePath);
+var convertedText = text.Replace(COMMA, TAB);
+File.WriteAllText(csvConverterArgument.OutputFilePath, convertedText);
 
 struct CsvConverterArgument
 {
