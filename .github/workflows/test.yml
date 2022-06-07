@@ -1,0 +1,16 @@
+name: test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ masin ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: CI test
+        run: make test
