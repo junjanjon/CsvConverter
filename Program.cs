@@ -2,7 +2,16 @@ var csvConverterArgument = new CsvConverterArgument();
 var argumentParser = new ArgumentParser();
 argumentParser.AddParamHook("--input", delegate (string arg) { csvConverterArgument.InputFilePath = arg; });
 argumentParser.AddParamHook("--output", delegate (string arg) { csvConverterArgument.OutputFilePath = arg; });
-argumentParser.Parse(args);
+
+try
+{
+    argumentParser.Parse(args);
+}
+catch (ArgumentException e)
+{
+    Console.Error.WriteLine(e.Message);
+    return 1;
+}
 
 // ReSharper disable InconsistentNaming
 const string COMMA = ",";
@@ -11,6 +20,7 @@ const string TAB = "\t";
 var text = File.ReadAllText(csvConverterArgument.InputFilePath);
 var convertedText = text.Replace(COMMA, TAB);
 File.WriteAllText(csvConverterArgument.OutputFilePath, convertedText);
+return 0;
 
 struct CsvConverterArgument
 {
@@ -34,8 +44,16 @@ class ArgumentParser
             var arg = args[i];
             if (_paramHooks.ContainsKey(arg))
             {
-                var nextArg = args[i + 1];
-                _paramHooks[arg](nextArg);
+                if (args.Length <= i + 1)
+                {
+                    throw new ArgumentException($"{arg}: requires an argument");
+                }
+                else
+                {
+                    var nextArg = args[i + 1];
+                    _paramHooks[arg](nextArg);
+                    i++;
+                }
             }
         }
     }
