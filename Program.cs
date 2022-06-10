@@ -13,6 +13,11 @@ catch (ArgumentException e)
     return 1;
 }
 
+if (!csvConverterArgument.Validate())
+{
+    return 1;
+}
+
 // ReSharper disable InconsistentNaming
 const string COMMA = ",";
 const string TAB = "\t";
@@ -26,6 +31,21 @@ struct CsvConverterArgument
 {
     public string InputFilePath { get; set; }
     public string OutputFilePath { get; set; }
+
+    public bool Validate()
+    {
+        if (string.IsNullOrEmpty(InputFilePath))
+        {
+            Console.Error.WriteLine("--input is required.");
+            return false;
+        }
+        if (string.IsNullOrEmpty(OutputFilePath))
+        {
+            Console.Error.WriteLine("--output is required.");
+            return false;
+        }
+        return true;
+    }
 }
 
 class ArgumentParser
