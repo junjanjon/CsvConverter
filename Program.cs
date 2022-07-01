@@ -9,6 +9,14 @@ ConvertCsvToTsv(csvConverterArgument.InputFilePath, csvConverterArgument.OutputF
 
 void ConvertCsvToTsv(string inputFilePath, string outputFilePath)
 {
+    if (string.IsNullOrEmpty(inputFilePath) || string.IsNullOrEmpty(outputFilePath))
+    {
+        throw new ArgumentException("inputFilePath or outputFilePath is null or empty");
+    }
+    if (!File.Exists(inputFilePath))
+    {
+        throw new FileNotFoundException("Input file not found", inputFilePath);
+    }
     // ReSharper disable InconsistentNaming
     const string COMMA = ",";
     const string TAB = "\t";
