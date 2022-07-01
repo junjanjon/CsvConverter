@@ -3,9 +3,7 @@ var argv = new ArgumentParser()
     .AddDemandOption("output")
     .Parse(args);
 
-var csvConverterArgument = new CsvConverterArgument(argv["input"], argv["output"]);
-
-ConvertCsvToTsv(csvConverterArgument.InputFilePath, csvConverterArgument.OutputFilePath);
+ConvertCsvToTsv(argv["input"], argv["output"]);
 
 void ConvertCsvToTsv(string inputFilePath, string outputFilePath)
 {
@@ -23,18 +21,6 @@ void ConvertCsvToTsv(string inputFilePath, string outputFilePath)
     var text = File.ReadAllText(inputFilePath);
     var convertedText = text.Replace(COMMA, TAB);
     File.WriteAllText(outputFilePath, convertedText);
-}
-
-struct CsvConverterArgument
-{
-    public CsvConverterArgument(string inputFilePath, string outputFilePath)
-    {
-        InputFilePath = inputFilePath;
-        OutputFilePath = outputFilePath;
-    }
-
-    public string InputFilePath { get; set; }
-    public string OutputFilePath { get; set; }
 }
 
 class ArgumentParser
