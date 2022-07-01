@@ -12,9 +12,10 @@ echo ',6,7,8' >> TestCase/3.csv
 echo '1	2		4' > TestCase/3.tsv
 echo '	6	7	8' >> TestCase/3.tsv
 mkdir -p tmp
-dotnet run --input TestCase/1.csv --output tmp/1.tsv
-dotnet run --input TestCase/2.csv --output tmp/2.tsv
-dotnet run --input TestCase/3.csv --output tmp/3.tsv
+dotnet build -c Release
+dotnet ./bin/Release/net6.0/CsvConverter.dll --input TestCase/1.csv --output tmp/1.tsv
+dotnet ./bin/Release/net6.0/CsvConverter.dll --input TestCase/2.csv --output tmp/2.tsv
+dotnet ./bin/Release/net6.0/CsvConverter.dll --input TestCase/3.csv --output tmp/3.tsv
 
 cmp TestCase/1.tsv tmp/1.tsv -s
 cmp TestCase/2.tsv tmp/2.tsv -s

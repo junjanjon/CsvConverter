@@ -1,0 +1,22 @@
+name: build
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Build
+        run: dotnet build -c Release
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: CsvConverter
+          path: |
+            bin/Release/net6.0
