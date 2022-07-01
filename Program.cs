@@ -3,30 +3,24 @@ var argv = new ArgumentParser()
     .AddDemandOption("output")
     .Parse(args);
 
-var csvConverterArgument = new CsvConverterArgument(argv["input"], argv["output"]);
-
-ConvertCsvToTsv(csvConverterArgument.InputFilePath, csvConverterArgument.OutputFilePath);
+ConvertCsvToTsv(argv["input"], argv["output"]);
 
 void ConvertCsvToTsv(string inputFilePath, string outputFilePath)
 {
+    if (string.IsNullOrEmpty(inputFilePath) || string.IsNullOrEmpty(outputFilePath))
+    {
+        throw new ArgumentException("inputFilePath or outputFilePath is null or empty");
+    }
+    if (!File.Exists(inputFilePath))
+    {
+        throw new FileNotFoundException("Input file not found", inputFilePath);
+    }
     // ReSharper disable InconsistentNaming
     const string COMMA = ",";
     const string TAB = "\t";
     var text = File.ReadAllText(inputFilePath);
     var convertedText = text.Replace(COMMA, TAB);
     File.WriteAllText(outputFilePath, convertedText);
-}
-
-struct CsvConverterArgument
-{
-    public CsvConverterArgument(string inputFilePath, string outputFilePath)
-    {
-        InputFilePath = inputFilePath;
-        OutputFilePath = outputFilePath;
-    }
-
-    public string InputFilePath { get; set; }
-    public string OutputFilePath { get; set; }
 }
 
 class ArgumentParser
